@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.RobotProperties;
 import frc.robot.commands.MoveRobotCommand;
 import frc.robot.subsystems.SkateBotSubsystem;
 
@@ -19,21 +20,26 @@ public class RobotContainer {
 
   private static final String m_port = null;
   public static Joystick driveStick;
+  public static Joystick turnStick;
   public static SkateBotSubsystem skateBotSubsystem = new SkateBotSubsystem();
 
 
   public RobotContainer() {
-    // Configure the button bindings
+    Constants.RobotProperties.configureRobotSettings();
     configureDriverInterface();
-    //skateBotSubsystem.setDefaultCommand(new MoveRobotCommand());
-    System.out.println("*** RC");
-    //skateBotSubsystem.moveRobot();
     skateBotSubsystem.setDefaultCommand(new MoveRobotCommand());
-    System.out.println("*** RC1");
   }
 
   private void configureDriverInterface(){
-    driveStick = new Joystick(0);
+    switch (Constants.RobotProperties.driveInterface){
+      case ONESTICK:
+        driveStick = new Joystick(0);
+        break;
+      case TWOSTICK:
+        driveStick = new Joystick(1);
+        turnStick = new Joystick(0);
+      break;
+    }
   }
   
 
