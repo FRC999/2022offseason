@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SkateBotSubsystem;
 
@@ -21,11 +22,19 @@ public class MoveRobotCommand extends CommandBase {
 
   @Override
   public void execute() {
-    //double move = RobotContainer.driveStick.getY() * (-1);
-    //double turn = RobotContainer.driveStick.getX();
+    double move = 0;
+    double turn = 0;
 
-    double move = RobotContainer.driveStick.getX();
-    double turn = RobotContainer.driveStick.getY() * (-1);
+    switch (Constants.RobotProperties.driveInterface){
+      case ONESTICK:
+        move = RobotContainer.driveStick.getX();
+        turn = RobotContainer.driveStick.getY() * (-1);
+        break;
+      case TWOSTICK:
+        move = RobotContainer.driveStick.getX();
+        turn = RobotContainer.turnStick.getY() * (-1);
+        break;
+    }
 
     RobotContainer.skateBotSubsystem.arcadeDriving(move, turn);
   }
