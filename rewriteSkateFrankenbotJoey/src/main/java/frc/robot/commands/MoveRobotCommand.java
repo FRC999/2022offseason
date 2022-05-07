@@ -21,7 +21,13 @@ public class MoveRobotCommand extends CommandBase {
 
   @Override
   public void execute() {
-    RobotContainer.skateBotSubsystem.moveRobot();
+    //double move = RobotContainer.driveStick.getY() * (-1);
+    //double turn = RobotContainer.driveStick.getX();
+
+    double move = RobotContainer.driveStick.getX();
+    double turn = RobotContainer.driveStick.getY() * (-1);
+
+    RobotContainer.skateBotSubsystem.arcadeDriving(move, turn);
   }
 
 
