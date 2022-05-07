@@ -29,6 +29,7 @@ public class RobotContainer {
   public RobotContainer() {
     Constants.RobotProperties.configureRobotSettings();
     configureDriverInterface();
+    configureButtonBindings();
     skateBotSubsystem.setDefaultCommand(new MoveRobotCommand());
   }
 
@@ -44,7 +45,13 @@ public class RobotContainer {
     }
   }
   
+  private void configureButtonBindings(){
+    new JoystickButton(driveStick, 11)
+    .whenPressed(new InstantCommand(pneumaticsSubsystem::solenoidUp));
 
+    new JoystickButton(driveStick, 12)
+    .whenReleased(new InstantCommand(pneumaticsSubsystem::solenoidDown));
+  }
 
 }
 

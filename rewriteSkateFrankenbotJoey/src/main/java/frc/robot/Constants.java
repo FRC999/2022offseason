@@ -22,11 +22,15 @@ public final class Constants {
 
 
     public static final class RobotProperties{
-    public static DriveInterface driveInterface;
+        public static DriveInterface driveInterface;
 
-    static void configureRobotSettings(){
-        RobotProperties.driveInterface = DriveInterface.TWOSTICK;
-      }
+        static void configureRobotSettings(){
+            RobotProperties.driveInterface = DriveInterface.TWOSTICK;
+        }
+    }
+
+    public static final class PneumaticsConstants{
+        public static int[] SolenoidChannel;
     }
 
 
