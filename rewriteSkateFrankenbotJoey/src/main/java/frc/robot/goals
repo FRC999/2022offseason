@@ -1,0 +1,19 @@
+goal 1
+
+make frankenbot cylinder extend
+
+-define and activate compressor
+-needs to be set up in automated mode
+-compressor only activates when robot is enabled 
+-in constructor of smth
+
+
+
+
+
+
+goal 2
+
+-define solenoid which is connected to canbus
+-solenoid has methods to activate one or the other end
+-needs to be attatched to a button

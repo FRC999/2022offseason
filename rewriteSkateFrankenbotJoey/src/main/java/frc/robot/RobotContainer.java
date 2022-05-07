@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotProperties;
 import frc.robot.commands.MoveRobotCommand;
+import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.SkateBotSubsystem;
 
 
@@ -22,6 +23,7 @@ public class RobotContainer {
   public static Joystick driveStick;
   public static Joystick turnStick;
   public static SkateBotSubsystem skateBotSubsystem = new SkateBotSubsystem();
+  public static PneumaticsSubsystem pneumaticsSubsystem = new PneumaticsSubsystem();
 
 
   public RobotContainer() {
