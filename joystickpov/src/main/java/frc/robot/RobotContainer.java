@@ -6,9 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.ElevatorCode;
 
 
 
@@ -17,7 +19,7 @@ public class RobotContainer {
 
 private static final String m_port = null;
 public static Joystick driveStick;
-
+public static final ElevatorCode elevatorCode = new ElevatorCode();
 
   public RobotContainer() {
     // Configure the button bindings
@@ -31,7 +33,12 @@ public static Joystick driveStick;
 
   private void configureButtonBindings() {
     new JoystickButton(driveStick, 11)
-    .whenPressed(new PrintCommand("Yeet."));
+    .whenPressed(new InstantCommand(elevatorCode::forwardMotor))
+    .whenReleased(new InstantCommand(elevatorCode::stopMotor));
+
+    new JoystickButton(driveStick, 12)
+    .whenPressed(new InstantCommand(elevatorCode::reverseMotor))
+    .whenReleased(new InstantCommand(elevatorCode::stopMotor));
     
     Trigger z1 = new Trigger(() -> returnZ());
     z1.whileActiveContinuous(new PrintCommand("kanye for prez 2026"));
