@@ -46,11 +46,9 @@ public class RobotContainer {
   }
   
   private void configureButtonBindings(){
-    new JoystickButton(driveStick, 11)
-    .whenPressed(new InstantCommand(pneumaticsSubsystem::solenoidUp));
 
-    new JoystickButton(driveStick, 12)
-    .whenPressed(new InstantCommand(pneumaticsSubsystem::solenoidDown));
+    new JoystickButton(driveStick, 1)
+      .whenPressed(new InstantCommand(() -> pneumaticsSubsystem.slayenoidTheHouseUpAndDown()));
   }
 
 }
