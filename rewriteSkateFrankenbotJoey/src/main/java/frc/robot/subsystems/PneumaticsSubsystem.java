@@ -19,19 +19,17 @@ public class PneumaticsSubsystem {
         compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
         slayenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0,7);
         activateCompressor();
+        slayenoid.set(Value.kForward);
     }
 
     public void activateCompressor(){
         compressor.enableDigital();
     }
 
-    public void solenoidUp(){
+    public void slayenoidTheHouseUpAndDown(){
         //slayenoid.set(Value.kForward);
+        System.out.println("*** S TRIG ***");
         toggleSlay();
-    }
-
-    public void solenoidDown(){
-        slayenoid.set(Value.kReverse);
     }
 
     public void toggleSlay(){
