@@ -26,7 +26,8 @@ public class PneumaticsSubsystem {
     }
 
     public void solenoidUp(){
-        slayenoid.set(Value.kForward);
+        //slayenoid.set(Value.kForward);
+        toggleSlay();
     }
 
     public void solenoidDown(){
