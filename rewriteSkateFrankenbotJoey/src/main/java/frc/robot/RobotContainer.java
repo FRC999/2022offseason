@@ -50,7 +50,7 @@ public class RobotContainer {
     .whenPressed(new InstantCommand(pneumaticsSubsystem::solenoidUp));
 
     new JoystickButton(driveStick, 12)
-    .whenReleased(new InstantCommand(pneumaticsSubsystem::solenoidDown));
+    .whenPressed(new InstantCommand(pneumaticsSubsystem::solenoidDown));
   }
 
 }
