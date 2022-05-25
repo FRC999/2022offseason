@@ -1,5 +1,7 @@
-goal 2
+PID
 
--define solenoid which is connected to canbus
--solenoid has methods to activate one or the other end
--needs to be attatched to a button
+PD works from long distance
+PID works short distance
+
+I is used in low chance of burning motor
+I should have a limit on amperage

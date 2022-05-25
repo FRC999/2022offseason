@@ -4,13 +4,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.RobotProperties;
 import frc.robot.commands.MoveRobotCommand;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.SkateBotSubsystem;
@@ -19,7 +15,6 @@ import frc.robot.subsystems.SkateBotSubsystem;
 
 public class RobotContainer {
 
-  private static final String m_port = null;
   public static Joystick driveStick;
   public static Joystick turnStick;
   public static SkateBotSubsystem skateBotSubsystem = new SkateBotSubsystem();
