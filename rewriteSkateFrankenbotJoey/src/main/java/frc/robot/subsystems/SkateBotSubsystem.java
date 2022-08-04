@@ -23,10 +23,13 @@ public class SkateBotSubsystem extends SubsystemBase {
   public SkateBotSubsystem() {
     motorController1 = new WPI_TalonFX(9);
     motorController2 = new WPI_TalonFX(10);
+    motorController1.setNeutralMode(NeutralMode.Brake);
     motorController2.setNeutralMode(NeutralMode.Brake);
     configureEncoders();
     zeroEncoders();
     drive = new DifferentialDrive(motorController1, motorController2);
+
+    motorController2.setInverted(true);
   }
 
   public void arcadeDriving(double move, double turn){
@@ -105,9 +108,12 @@ public class SkateBotSubsystem extends SubsystemBase {
       stopMotor2();
   }
 
+//-----------------------------------------------------------------------------------------------
 
-
-
+  public void slayMotionMagic(int leftVal, int rightVal){
+    motorController1.set(ControlMode.Velocity, leftVal);
+    motorController2.set(ControlMode.Velocity, rightVal);
+  }
 
 
 

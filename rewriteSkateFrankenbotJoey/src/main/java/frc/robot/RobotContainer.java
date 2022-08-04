@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.MoveRobotCommand;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.SkateBotSubsystem;
+import frc.robot.subsystems.SlayDashboardSubsystem;
 
 
 
@@ -19,6 +20,7 @@ public class RobotContainer {
   public static Joystick turnStick;
   public static SkateBotSubsystem skateBotSubsystem = new SkateBotSubsystem();
   public static PneumaticsSubsystem pneumaticsSubsystem = new PneumaticsSubsystem();
+  public static SlayDashboardSubsystem slayDashboardSubsystem = new SlayDashboardSubsystem(); 
 
 
   public RobotContainer() {
@@ -44,7 +46,12 @@ public class RobotContainer {
 
     new JoystickButton(driveStick, 1)
       .whenPressed(new InstantCommand(() -> pneumaticsSubsystem.slayenoidTheHouseUpAndDown()));
+
+    //new JoystickButton (driveStick, 9).whenPressed(SkateBotSubsystem::setToZero);
+
   }
+
+
 
 }
 
