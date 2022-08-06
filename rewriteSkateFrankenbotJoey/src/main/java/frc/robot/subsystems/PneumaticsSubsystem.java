@@ -22,12 +22,13 @@ public class PneumaticsSubsystem {
     }
 
     public void activateCompressor(){
-        compressor.enableDigital();
+        //compressor.enableDigital();
+        compressor.disable();
     }
 
     public void slayenoidTheHouseUpAndDown(){
         //slayenoid.set(Value.kForward);
-        System.out.println("*** S TRIG ***");
+        System.out.println("slay those cookies");
         toggleSlay();
     }
 

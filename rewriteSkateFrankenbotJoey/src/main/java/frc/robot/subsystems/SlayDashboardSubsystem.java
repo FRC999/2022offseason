@@ -12,10 +12,7 @@ import frc.robot.RobotContainer;
 
 public class SlayDashboardSubsystem extends SubsystemBase {
   /** Creates a new SmartDashboard. */
-  public SlayDashboardSubsystem() {
-
-    System.out.println("TEST SD1");
-    
+  public SlayDashboardSubsystem() {    
     updateEncoders();
   }
 
@@ -24,9 +21,6 @@ public class SlayDashboardSubsystem extends SubsystemBase {
   }
 
   public void updateEncoders(){
-
-    System.out.println("TEST SD0");
-
     SmartDashboard.putNumber("left encoder", RobotContainer.skateBotSubsystem.getMotor1Encoder());
     SmartDashboard.putNumber("right encoder", RobotContainer.skateBotSubsystem.getMotor2Encoder());
   }

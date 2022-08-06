@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -82,6 +83,7 @@ public class SkateBotSubsystem extends SubsystemBase {
   public void zeroEncoders(){
     motorController1.setSelectedSensorPosition(0);
     motorController2.setSelectedSensorPosition(0);
+    System.out.println("im coding!");
   }
 
   public int getMotor1Encoder(){
@@ -110,11 +112,92 @@ public class SkateBotSubsystem extends SubsystemBase {
 
 //-----------------------------------------------------------------------------------------------
 
-  public void slayMotionMagic(int leftVal, int rightVal){
+  public void slayMotionMagic(double leftVal, double rightVal){
     motorController1.set(ControlMode.Velocity, leftVal);
     motorController2.set(ControlMode.Velocity, rightVal);
   }
 
+  public void configureSimpleMagic() {
+      motorController1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 30);
+      motorController2.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 30);
+      motorController2.configNeutralDeadband(.001, 30);
+      motorController1.configNeutralDeadband(.001, 30);
+      motorController1.setSensorPhase(false);
+      motorController2.setSensorPhase(false);
+      motorController1.setInverted(true);
+      motorController2.setInverted(false);
+      motorController2.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 10, 30);
+      motorController1.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 10, 30);
+      motorController2.setStatusFramePeriod(StatusFrame.Status_10_Targets, 10, 30);
+      motorController1.setStatusFramePeriod(StatusFrame.Status_10_Targets, 10, 30);
+      motorController1.configPeakOutputForward(+1.0, 30);
+      motorController1.configPeakOutputReverse(-1.0, 30);
+      motorController1.configNominalOutputForward(0, 30);
+      motorController1.configNominalOutputReverse(0, 30);
+      motorController2.configPeakOutputForward(+1.0, 30);
+      motorController2.configPeakOutputReverse(-1.0, 30);
+      motorController2.configNominalOutputForward(0, 30);
+      motorController2.configNominalOutputReverse(0, 30);      
+      
+      /* FPID Gains for each side of drivetrain */
+      motorController1.selectProfileSlot(0, 0);
+      motorController1.config_kP0, 0.75,
+        30);
+      motorController1.config_kI0, 0.005,
+        30);
+      motorController1.config_kD0, 0.01,
+        30);
+      motorController1.config_kF0, 2,
+        30);
+
+      motorController1.config_IntegralZone0, 500,
+        30);
+      motorController1.configClosedLoopPeakOutput0, DriveConstants.PeakOutput_0,
+        30);
+      motorController1.configAllowableClosedloopError0, 5, 30);
+      
+
+      motorController2.selectProfileSlot0, DriveConstants.kPIDLoopIdx);
+      motorController2.config_kP0, 0.75,
+        30);
+      motorController2.config_kI0, 0.005,
+        30);
+      motorController2.config_kD0, 0.01,
+        30);
+      motorController2.config_kF0, 2,
+        30);
+
+      motorController2.config_IntegralZone0, DriveConstants.Izone_0,
+        30);
+      motorController2.configClosedLoopPeakOutput0, DriveConstants.PeakOutput_0,
+        30);
+      motorController2.configAllowableClosedloopError0, 5, 30);
+      
+
+    /**
+     * 1ms per loop. PID loop can be slowed down if need be. For example, - if
+     * sensor updates are too slow - sensor deltas are very small per update, so
+     * derivative error never gets large enough to be useful. - sensor movement is
+     * very slow causing the derivative error to be near zero.
+     */
+    motorController2.configClosedLoopPeriod(0, DriveConstants.closedLoopPeriodMs,
+        30);
+    motorController1.configClosedLoopPeriod(0, DriveConstants.closedLoopPeriodMs,
+        30);
+
+    /* Motion Magic Configurations */
+
+    /**
+     * Need to replace numbers with real measured values for acceleration and cruise
+     * vel.
+     */
+    motorController1.configMotionAcceleration(6750, 30);
+    motorController1.configMotionCruiseVelocity(6750, 30);
+    motorController1.configMotionSCurveStrength(3);
+    motorController2.configMotionAcceleration(6750, 30);
+    motorController2.configMotionCruiseVelocity(6750, 30);
+    motorController2.configMotionSCurveStrength(3);
+  }
 
 
 

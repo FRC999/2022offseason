@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.MoveRobotCommand;
+import frc.robot.commands.PIDSlayCommand;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.SkateBotSubsystem;
 import frc.robot.subsystems.SlayDashboardSubsystem;
@@ -44,11 +45,14 @@ public class RobotContainer {
   
   private void configureButtonBindings(){
 
-    new JoystickButton(driveStick, 1)
+    new JoystickButton(driveStick, 7)
       .whenPressed(new InstantCommand(() -> pneumaticsSubsystem.slayenoidTheHouseUpAndDown()));
 
-    //new JoystickButton (driveStick, 9).whenPressed(SkateBotSubsystem::setToZero);
+    new JoystickButton (driveStick, 9)
+      .whenPressed(new InstantCommand(() -> skateBotSubsystem.zeroEncoders()));
 
+    new JoystickButton (driveStick, 8)
+      .whenPressed(new PIDSlayCommand(60));
   }
 
 

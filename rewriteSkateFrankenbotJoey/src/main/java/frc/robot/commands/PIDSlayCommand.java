@@ -12,16 +12,17 @@ public class PIDSlayCommand extends CommandBase {
   public static SkateBotSubsystem skateBotSubsystem = new SkateBotSubsystem();
 
   double yourmom;
-  int yourMomsTolerance = 2;
+  double yourMomsTolerance = 2 * (90/Math.PI);
 
   public PIDSlayCommand(double inches) {
-    yourmom = inches;
+    yourmom = inches * (90/Math.PI);
   }
 
   @Override
   public void initialize() {
     skateBotSubsystem.zeroEncoders();
-    //skateBotSubsystem.slayMotionMagic()
+    System.out.println("hi coding im dad");
+    skateBotSubsystem.slayMotionMagic(0.75, 0.75);
   }
 
   @Override
@@ -35,9 +36,7 @@ public class PIDSlayCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return true;
-    //return Math.abs((getDriveEncoderTicks() - yourmom)) <= yourMomsTolerance;
+    return Math.abs((skateBotSubsystem.motorController1.getSelectedSensorPosition() - yourmom)) <= yourMomsTolerance;
   }
 }
 
-//put down 10 feet in tape and then put it on smartdashboard for ticks to find the manual

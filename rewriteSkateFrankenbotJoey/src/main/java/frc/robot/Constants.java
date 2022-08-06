@@ -23,7 +23,7 @@ public final class Constants {
         public static DriveInterface driveInterface;
 
         static void configureRobotSettings(){
-            RobotProperties.driveInterface = DriveInterface.TWOSTICK;
+            RobotProperties.driveInterface = DriveInterface.ONESTICK;
         }
     }
 
