@@ -23,7 +23,11 @@ public class SlayDashboardSubsystem extends SubsystemBase {
   public void updateEncoders(){
     SmartDashboard.putNumber("left encoder", RobotContainer.skateBotSubsystem.getMotor1Encoder());
     SmartDashboard.putNumber("right encoder", RobotContainer.skateBotSubsystem.getMotor2Encoder());
+    SmartDashboard.putNumber("left error", RobotContainer.skateBotSubsystem.getDriveError(1));
+    SmartDashboard.putNumber("right error", RobotContainer.skateBotSubsystem.getDriveError(2));
+
   }
+
 
   @Override
   public void periodic() {

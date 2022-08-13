@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.MoveRobotCommand;
 import frc.robot.commands.PIDSlayCommand;
+import frc.robot.commands.PIDSlayTurning;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.SkateBotSubsystem;
 import frc.robot.subsystems.SlayDashboardSubsystem;
@@ -53,6 +54,9 @@ public class RobotContainer {
 
     new JoystickButton (driveStick, 8)
       .whenPressed(new PIDSlayCommand(60));
+
+      new JoystickButton (driveStick, 10)
+      .whenPressed(new PIDSlayTurning(10,-10));
   }
 
 
