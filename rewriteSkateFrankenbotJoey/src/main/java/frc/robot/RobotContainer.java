@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.MoveRobotCommand;
 import frc.robot.commands.PIDSlayCommand;
 import frc.robot.commands.PIDSlayTurning;
+import frc.robot.commands.SoftwarePIDTurning;
+import frc.robot.subsystems.NavXSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.SkateBotSubsystem;
 import frc.robot.subsystems.SlayDashboardSubsystem;
@@ -17,12 +19,14 @@ import frc.robot.subsystems.SlayDashboardSubsystem;
 
 
 public class RobotContainer {
-
+  static double angle = 45; 
   public static Joystick driveStick;
   public static Joystick turnStick;
   public static SkateBotSubsystem skateBotSubsystem = new SkateBotSubsystem();
   public static PneumaticsSubsystem pneumaticsSubsystem = new PneumaticsSubsystem();
   public static SlayDashboardSubsystem slayDashboardSubsystem = new SlayDashboardSubsystem(); 
+  public static NavXSubsystem NavX = new NavXSubsystem();
+  public static SoftwarePIDTurning turnToAngle = new SoftwarePIDTurning(angle, NavX);
 
 
   public RobotContainer() {
