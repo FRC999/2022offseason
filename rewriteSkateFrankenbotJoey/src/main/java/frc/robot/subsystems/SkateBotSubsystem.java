@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 
@@ -182,7 +183,11 @@ public class SkateBotSubsystem extends SubsystemBase {
     }
   }
 
-
+  public void arcadeDrive(double fwd, double rot) {
+    //drive.arcadeDrive(fwd, rot);
+    SmartDashboard.putNumber("Rotation",rot); 
+    System.out.println("R "+rot);
+  }
 
   @Override
   public void periodic() {

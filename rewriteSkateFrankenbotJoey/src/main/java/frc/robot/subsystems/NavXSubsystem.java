@@ -7,28 +7,24 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 public class NavXSubsystem extends SubsystemBase {
   AHRS ahrs;
   /** Creates a new NavXSubsystem. */
   public NavXSubsystem() {
+    ahrs = new AHRS(SPI.Port.kMXP); 
   }
-  public double getRobotHeading(){
-    if (ahrs.isConnected()){
-      return RobotContainer.NavX.getHeading();
-    } else {
-      return 0;
-    }
+  public double getHeading() {
+    return ahrs.getYaw();
   }
 
-  public double getHeading() {
-    return this.ahrs.getYaw();
+  public void zeroHeading(){
+    ahrs.zeroYaw(); 
   }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  }
-  public Object arcadeDrive(int i, double output) {
-    return null;
   }
 }

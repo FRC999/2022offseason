@@ -13,11 +13,11 @@ import frc.robot.RobotContainer;
 public class SlayDashboardSubsystem extends SubsystemBase {
   /** Creates a new SmartDashboard. */
   public SlayDashboardSubsystem() {    
-    updateEncoders();
   }
 
   public void updateAllDisplays(){
     updateEncoders();
+    updateNavxValues();
   }
 
   public void updateEncoders(){
@@ -26,6 +26,10 @@ public class SlayDashboardSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("left error", RobotContainer.skateBotSubsystem.getDriveError(1));
     SmartDashboard.putNumber("right error", RobotContainer.skateBotSubsystem.getDriveError(2));
 
+  }
+
+  public void updateNavxValues(){
+    SmartDashboard.putNumber("Heading", RobotContainer.NavX.getHeading());
   }
 
 

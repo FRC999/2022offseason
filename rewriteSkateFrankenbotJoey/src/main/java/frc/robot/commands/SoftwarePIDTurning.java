@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.NavXSubsystem;
 import frc.robot.subsystems.SkateBotSubsystem;
 
@@ -14,13 +15,20 @@ import frc.robot.subsystems.SkateBotSubsystem;
 public class SoftwarePIDTurning extends PIDCommand {
   /** Creates a new SoftwarePIDTurning. */
   
-  public SoftwarePIDTurning(double targetAngleDegrees, NavXSubsystem NavX) {
+  public SoftwarePIDTurning(double targetAngleDegrees) {
     super(
       new PIDController(0.75,0.00,0.00),
-      NavX::getHeading,
+      RobotContainer.NavX::getHeading,
       targetAngleDegrees,
-      output -> NavX.arcadeDrive(0, output),
-      NavX);
+      output -> RobotContainer.skateBotSubsystem.arcadeDrive(0, output),
+      RobotContainer.NavX, RobotContainer.skateBotSubsystem); 
+
+       // Set the controller to be continuous (because it is an angle controller)
+    getController().enableContinuousInput(-180, 180);
+    // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
+    // setpoint before it is considered as having reached the reference
+    getController()
+        .setTolerance(2,5);
       
     
     // Use addRequirements() here to declare subsystem dependencies.
@@ -28,11 +36,16 @@ public class SoftwarePIDTurning extends PIDCommand {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    //RobotContainer.NavX.zeroHeading(); 
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override

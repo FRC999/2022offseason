@@ -4,8 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.MoveRobotCommand;
 import frc.robot.commands.PIDSlayCommand;
@@ -26,7 +28,7 @@ public class RobotContainer {
   public static PneumaticsSubsystem pneumaticsSubsystem = new PneumaticsSubsystem();
   public static SlayDashboardSubsystem slayDashboardSubsystem = new SlayDashboardSubsystem(); 
   public static NavXSubsystem NavX = new NavXSubsystem();
-  public static SoftwarePIDTurning turnToAngle = new SoftwarePIDTurning(angle, NavX);
+  //public static SoftwarePIDTurning turnToAngle = new SoftwarePIDTurning(angle, NavX);
 
 
   public RobotContainer() {
@@ -61,6 +63,27 @@ public class RobotContainer {
 
       new JoystickButton (driveStick, 10)
       .whenPressed(new PIDSlayTurning(10,-10));
+
+    new JoystickButton(driveStick,5).whenPressed(new InstantCommand (RobotContainer.NavX::zeroHeading));
+    new JoystickButton(driveStick,6).whenHeld(new SoftwarePIDTurning(45.0));
+
+    new JoystickButton(driveStick, 4)
+    .whenHeld(
+        new PIDCommand(
+            new PIDController(
+                0.75,
+                0,
+                0),
+            // Close the loop on the turn rate
+            NavX::getHeading,
+            // Setpoint is 0
+            45,
+            // Pipe the output to the turning controls
+            output -> skateBotSubsystem.arcadeDrive(0, output),
+            // Require the robot drive
+            skateBotSubsystem)
+          );
+
   }
 
 
