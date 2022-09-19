@@ -21,7 +21,8 @@ public class SoftwarePIDTurning extends PIDCommand {
       RobotContainer.NavX::getHeading,
       targetAngleDegrees,
       output -> RobotContainer.skateBotSubsystem.arcadeDrive(0, output),
-      RobotContainer.NavX, RobotContainer.skateBotSubsystem); 
+      RobotContainer.NavX, RobotContainer.skateBotSubsystem);
+    System.out.println("In software pid turning"); 
 
        // Set the controller to be continuous (because it is an angle controller)
     getController().enableContinuousInput(-180, 180);

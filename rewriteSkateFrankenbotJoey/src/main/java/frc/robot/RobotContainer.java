@@ -65,13 +65,15 @@ public class RobotContainer {
       .whenPressed(new PIDSlayTurning(10,-10));
 
     new JoystickButton(driveStick,5).whenPressed(new InstantCommand (RobotContainer.NavX::zeroHeading));
-    new JoystickButton(driveStick,6).whenHeld(new SoftwarePIDTurning(45.0));
+    new JoystickButton(driveStick,6).whenHeld(new SoftwarePIDTurning(90.0));
 
     new JoystickButton(driveStick, 4)
     .whenHeld(
-        new PIDCommand(
+      new InstantCommand (RobotContainer.NavX::zeroHeading)
+      .andThen(
+      new PIDCommand(
             new PIDController(
-                0.75,
+                -0.01,
                 0,
                 0),
             // Close the loop on the turn rate
@@ -79,9 +81,9 @@ public class RobotContainer {
             // Setpoint is 0
             45,
             // Pipe the output to the turning controls
-            output -> skateBotSubsystem.arcadeDrive(0, output),
+            output -> skateBotSubsystem.arcadeDrive(0, output - 0.1),
             // Require the robot drive
-            skateBotSubsystem)
+            skateBotSubsystem))
           );
 
   }

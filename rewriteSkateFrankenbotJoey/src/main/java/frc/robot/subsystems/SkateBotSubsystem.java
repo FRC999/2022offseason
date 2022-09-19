@@ -184,7 +184,7 @@ public class SkateBotSubsystem extends SubsystemBase {
   }
 
   public void arcadeDrive(double fwd, double rot) {
-    //drive.arcadeDrive(fwd, rot);
+    drive.arcadeDrive(fwd, rot);
     SmartDashboard.putNumber("Rotation",rot); 
     System.out.println("R "+rot);
   }
