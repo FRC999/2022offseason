@@ -4,13 +4,17 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.sensors.PigeonIMU;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.PigeonIMUTurningCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -24,15 +28,25 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   public static Joystick imujoystick1 = new Joystick(0);
+  public static PigeonIMU pidgy = new PigeonIMU(4);
   public static PigeonSubsystem pigeonSubsystem = new PigeonSubsystem();
+  //public final PigeonIMUTurningCommand turningcommandIMU = new PigeonIMUTurningCommand(pigeonSubsystem);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
   }
-  private void configureButtonBindings() {
+  public void configureButtonBindings() {
     new JoystickButton(imujoystick1, 9).whenPressed(pigeonSubsystem::turnMotorWithPigeon);
-    System.out.print("The turning mode works, somewhat...");
+    //System.out.print("The turning mode works, somewhat, in robotcontainer");
+    //new JoystickButton(imujoystick1, 10).whenPressed(new turningcommandIMU(pigeonSubsystem::turnMotorWithPigeon,
+    //pigeonSubsystem));
+    //new JoystickButton.whenPressed(set.(InstantCommand(PigeonIMUTurningCommand, 9)));
+
+
+    
+    
+  
   }
   
   /**

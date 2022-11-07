@@ -12,4 +12,17 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {}
+public final class Constants {
+
+}
+
+public static final class DriveConstants {
+
+    public static boolean isInvertdGearBox = false;
+
+    public static int[] leftMotorPortID = new int[] { 1 };
+    public static int[] rightMotorPortID = new int[] { 2 };
+
+    public static int[] kLeftEncoderPorts = new int[] { 1 };
+    public static int[] kRightEncoderPorts = new int[] { 2 };
+}

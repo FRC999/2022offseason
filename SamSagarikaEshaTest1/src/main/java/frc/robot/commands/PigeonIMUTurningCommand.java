@@ -12,7 +12,12 @@ import frc.robot.subsystems.PigeonSubsystem;
 public class PigeonIMUTurningCommand extends CommandBase {
   /** Creates a new PigeonIMUTurningCommand. */
   
+  //private final PigeonSubsystem pigeonsubsystem;
+  
   public PigeonIMUTurningCommand() {
+    //pigeonsubsystem = subsystem;
+    //addRequirements(subsystem);
+    System.out.print("This command runs");
     //motorLeft.set(ControlMode.PercentOutput, 0.1);
     // Use addRequirements() here to declare subsystem dependencies.
   }

@@ -17,37 +17,61 @@ public class PidgeonIMUSubsystem extends SubsystemBase {
 
   TalonSRX talon;
   WPI_PigeonIMU gyro;
-  WPI_TalonFX rightMotor;
-  WPI_TalonFX leftMotor;
+  WPI_TalonFX rightMotorMaster;
+  WPI_TalonFX leftMotorMaster;
+  WPI_TalonFX rightMotorFollower;
+  WPI_TalonFX leftMotorFollower;
   DifferentialDrive drive;
-  double kP = 0.05;
+  double kP = 0.02;
 
   /** Creates a new ExampleSubsystem. */
+
   public PidgeonIMUSubsystem() {
-    talon = new TalonSRX(2);
+    talon = new TalonSRX(5);
     gyro = new WPI_PigeonIMU(talon);
 
-    rightMotor = new WPI_TalonFX(1);
-    leftMotor = new WPI_TalonFX(2);
-    rightMotor.setInverted(true);
-    rightMotor.setSafetyEnabled(false);
-    leftMotor.setSafetyEnabled(false);
+    rightMotorMaster = new WPI_TalonFX(1);
+    rightMotorFollower = new WPI_TalonFX(2);
+    leftMotorMaster = new WPI_TalonFX(3);
+    leftMotorFollower = new WPI_TalonFX(4);
 
-    drive = new DifferentialDrive(leftMotor, rightMotor);
+    rightMotorFollower.follow(rightMotorMaster);
+    leftMotorFollower.follow(leftMotorMaster);
+
+    rightMotorMaster.setNeutralMode(NeutralMode.Brake);
+    leftMotorMaster.setNeutralMode(NeutralMode.Brake);
+
+    rightMotorMaster.setSafetyEnabled(false);
+    leftMotorMaster.setSafetyEnabled(false);
+
+    //leftMotorMaster.setInverted(true);
+    drive = new DifferentialDrive(leftMotorMaster, rightMotorMaster);
     drive.setSafetyEnabled(false);
   }
   
-  public void turnToAngle() {
-    // This method will be called once per scheduler run
-    rightMotor.setNeutralMode(NeutralMode.Brake);
-    leftMotor.setNeutralMode(NeutralMode.Brake);
-    //finding the heading error
-    double error = 90 - gyro.getAngle();
+  
+    public void turnToAngle() {
+      // This method will be called once per scheduler run
+      
+      //finding the heading error
+      double error = 90 - gyro.getAngle();
 
-    //turns the robot to face the desired direction
-    drive.tankDrive(kP * error, -kP * error);
-    System.out.print("This line runs");
-  }
+      //turns the robot to face the desired direction
+      drive.tankDrive(kP * error * 0.1, kP * error * 0.1);
+      System.out.print("This line still runs");
+      System.out.print(gyro.getAngle());
+      
+    }
+
+    public void manualDrive(double move, double turn) {
+      
+      // If joysticks will prove to be too sensitive near the center, turn on the deadband driving
+      
+      // drive.arcadeDrive(deadbandMove(move), deadbandTurn(turn));
+      // System.out.println("D X "+move + " Y " + turn);
+      drive.arcadeDrive(move, turn);
+    }
+  
 
   @Override
   public void periodic() {

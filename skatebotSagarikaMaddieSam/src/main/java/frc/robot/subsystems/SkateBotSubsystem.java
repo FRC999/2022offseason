@@ -12,12 +12,16 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class SkateBotSubsystem extends SubsystemBase {
-  public WPI_TalonFX  leftMotor = new WPI_TalonFX(9); 
-  public WPI_TalonFX  rightMotor = new WPI_TalonFX(10);
+  public WPI_TalonFX  leftMotor = new WPI_TalonFX(3); 
+  public WPI_TalonFX  leftMotorFollower = new WPI_TalonFX(4); 
+  public WPI_TalonFX  rightMotor = new WPI_TalonFX(1);
+  public WPI_TalonFX  rightMotorFollower = new WPI_TalonFX(2);
   DifferentialDrive drive = new DifferentialDrive(leftMotor, rightMotor); 
 
   /** Creates a new SkateBotSubsystem. */
   public SkateBotSubsystem() {
+    leftMotorFollower.follow(leftMotor);
+    rightMotorFollower.follow(rightMotor);
     leftMotor.setNeutralMode(NeutralMode.Brake); 
     rightMotor.setNeutralMode(NeutralMode.Brake); 
   }
