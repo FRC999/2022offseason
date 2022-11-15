@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import javax.swing.text.AbstractDocument.LeafElement;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -21,13 +22,17 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    leftmotor.setNeutralMode(NeutralMode.Brake);
-    rightmotor.setNeutralMode(NeutralMode.Brake);
     configureEncoders();
-    //configureSimpleMagic();
+    configureSimpleMagic();
+    brakeMode();
     zeroEncoders();
     drive = new DifferentialDrive(leftmotor, rightmotor);
     drive.setSafetyEnabled(false);
+  }
+
+  public void brakeMode() {
+    leftmotor.setNeutralMode(NeutralMode.Brake);
+    rightmotor.setNeutralMode(NeutralMode.Brake);
   }
 
   public void arcadeDriving(double move, double turn){
@@ -63,8 +68,89 @@ public class DriveSubsystem extends SubsystemBase {
     rightmotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 30);
   }
 
+  public void configureSimpleMagic(){
+    leftmotor.setInverted(false);
+    rightmotor.setInverted(true);
+  }
 
-  
+  public void manualDrive(double move, double turn) {
+    drive.arcadeDrive(move,turn);
+  }
+
+  public void configureSimpleMagic() {
+    
+      /* Configure motor neutral deadband */
+      rightmotor.configNeutralDeadband(0.001, 30);
+      leftmotor.configNeutralDeadband(0.001, 30);
+
+      leftmotor.setSensorPhase(true);
+      rightmotor.setSensorPhase(true);
+      
+      /* Set status frame periods to ensure we don't have stale data */
+      
+      rightmotor.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 10,
+          30);
+      leftmotor.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 10,
+          30);
+      rightmotor.setStatusFramePeriod(StatusFrame.Status_10_Targets, 10,
+          30);
+      leftmotor.setStatusFramePeriod(StatusFrame.Status_10_Targets, 10,
+          30);
+      //rightmotor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 20,
+      //    30);
+      //leftmotor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 20,
+      //    30);
+
+      /**
+      * Max out the peak output (for all modes). However you can limit the output of
+      * a given PID object with configClosedLoopPeakOutput().
+      */
+      leftmotor.configPeakOutputForward(+1.0, 30);
+      leftmotor.configPeakOutputReverse(-1.0, 30);
+      leftmotor.configNominalOutputForward(0, 30);
+      leftmotor.configNominalOutputReverse(0, 30);
+
+      rightmotor.configPeakOutputForward(+1.0, 30);
+      rightmotor.configPeakOutputReverse(-1.0, 30);
+      rightmotor.configNominalOutputForward(0, 30);
+      rightmotor.configNominalOutputReverse(0, 30);      
+      
+      /* FPID Gains for each side of drivetrain */
+      leftmotor.selectProfileSlot(0, 0);
+      leftmotor.config_kP(0, 0.75,
+        30);
+      leftmotor.config_kI(0, 0.005,
+        30);
+      leftmotor.config_kD(0, 0.01,
+        30);
+      leftmotor.config_kF(0, 0,
+        30);
+
+      leftmotor.config_IntegralZone(0, 500,
+        30);
+      leftmotor.configClosedLoopPeakOutput(0, 0.5,
+        30);
+      leftmotor.configAllowableClosedloopError(0, 5, 30);
+      
+
+      rightmotor.selectProfileSlot(0, 0);
+      rightmotor.config_kP(0, 0.75,
+        30);
+      rightmotor.config_kI(0, 0.005,
+        30);
+      rightmotor.config_kD(0, 0.01,
+        30);
+      rightmotor.config_kF(0, 0,
+        30);
+
+      rightmotor.config_IntegralZone(0, 5000,
+        30);
+      rightmotor.configClosedLoopPeakOutput(0, 0.5,
+        30);
+      rightmotor.configAllowableClosedloopError(0, 5, 30);
+      
+
+    }
 
   @Override
   public void periodic() {
