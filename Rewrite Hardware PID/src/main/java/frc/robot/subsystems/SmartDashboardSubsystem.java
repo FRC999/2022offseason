@@ -19,8 +19,21 @@ public class SmartDashboardSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Right Motor Error", RobotContainer.driveSubsystem.getRightError());
   }
 
+  void updatePigeon() {
+    /*SmartDashboard.putNumber("Pitch value", RobotContainer.pigeonIMU.getPitch());
+    SmartDashboard.putNumber("Roll value", RobotContainer.pigeonIMU.getRoll());
+    SmartDashboard.putNumber("Yaw value", RobotContainer.pigeonIMU.getYaw());
+    */
+    SmartDashboard.putString("IMU-Y-P-R",
+        String.format("%12.6f", RobotContainer.pigeonIMU.getYaw()) + "  "
+            + String.format("%12.6f", RobotContainer.pigeonIMU.getPitch()) + "  "
+            + String.format("%12.6f", RobotContainer.pigeonIMU.getRoll()));
+
+  }
+  
   void updateAllDisplays() {
     updateEncoders();
+    updatePigeon();
   }
   @Override
   public void periodic() {
