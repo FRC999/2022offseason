@@ -19,8 +19,13 @@ public class SmartDashboardSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Right Motor Error", RobotContainer.driveSubsystem.getRightError());
   }
 
+  void updateNavX() {
+    SmartDashboard.putNumber("NavX Value", RobotContainer.navXSubsystem.getYaw());
+  }
+
   void updateAllDisplays() {
     updateEncoders();
+    updateNavX();
   }
   @Override
   public void periodic() {
