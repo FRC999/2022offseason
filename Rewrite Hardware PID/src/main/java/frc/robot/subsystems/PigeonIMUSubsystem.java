@@ -14,10 +14,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PigeonIMUSubsystem extends SubsystemBase {
   /** Creates a new PigeonIMUSubsystem. */
+  WPI_TalonSRX pigeonIMUController = new WPI_TalonSRX(4);   //watch for class type!
   private WPI_TalonSRX pigeyTalonSRX;
-  private PigeonIMU bird;
+  private PigeonIMU bird = new PigeonIMU(pigeonIMUController);
   private double[] xyz = new double[3];
-  WPI_TalonFX pigeonIMU = new WPI_TalonFX(4);
   public PigeonIMUSubsystem() {
   }
 
