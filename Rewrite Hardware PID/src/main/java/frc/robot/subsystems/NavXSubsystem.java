@@ -27,4 +27,10 @@ public class NavXSubsystem extends SubsystemBase {
   public double getYaw() {
     return NavX.getYaw();
   }
+
+  public double zeroYaw() {
+    double temporaryDouble = NavX.getYaw();
+    NavX.zeroYaw();
+    return temporaryDouble;
+  }
 }

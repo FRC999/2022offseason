@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoDriveTenFeet;
+import frc.robot.commands.AutoTurnToAngle;
 import frc.robot.commands.DriveManuallyCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.PIDAutoTurnToAngle;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.NavXSubsystem;
@@ -56,6 +58,13 @@ public class RobotContainer {
     new JoystickButton(drivestick, 11)
           .whenPressed(new AutoDriveTenFeet())
           .whenReleased(new InstantCommand(RobotContainer.driveSubsystem::stopRobot, RobotContainer.driveSubsystem));
+
+    new JoystickButton(drivestick, 12)
+          .whenPressed(new AutoTurnToAngle(45.0));
+        //.whenReleased(new InstantCommand(RobotContainer.navXSubsystem::zeroYaw, RobotContainer.navXSubsystem));
+    new JoystickButton(drivestick, 10)
+        .whenPressed((new InstantCommand(navXSubsystem::zeroYaw)).andThen(new PIDAutoTurnToAngle()))
+        .whenReleased(new InstantCommand(RobotContainer.driveSubsystem::stopRobot, RobotContainer.driveSubsystem));
   }
 
   /**
