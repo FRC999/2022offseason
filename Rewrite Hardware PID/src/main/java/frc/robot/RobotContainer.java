@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoDriveTenFeet;
 import frc.robot.commands.DriveManuallyCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PigeonIMUSubsystem;
@@ -59,7 +60,12 @@ public class RobotContainer {
     new JoystickButton(drivestick, 11)
           .whenPressed(new AutoDriveTenFeet())
           .whenReleased(new InstantCommand(RobotContainer.driveSubsystem::stopRobot, RobotContainer.driveSubsystem));
+
+    new JoystickButton(drivestick, 7)
+          .whenPressed(new TurnToAngle(0.0));
   }
+
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

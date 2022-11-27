@@ -8,13 +8,19 @@ import javax.swing.text.AbstractDocument.LeafElement;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -24,6 +30,12 @@ public class DriveSubsystem extends SubsystemBase {
   public final int tickPerInch = (int)(clicksPerFoot / 12); // (int) (2048/(4*Math.PI));
   public final int tolerance = 1*tickPerInch;
   public DifferentialDrive drive;
+  TalonFXConfiguration leftConfig;
+  TalonFXConfiguration rightConfig;
+  public final static int kPigeonUnitsPerRotation = 8192;
+  public final static double kTurnTravelUnitsPerRotation = 3600;
+  public final static double kNeutralDeadband = 0.001;
+
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -33,6 +45,8 @@ public class DriveSubsystem extends SubsystemBase {
     zeroEncoders();
     drive = new DifferentialDrive(leftmotor, rightmotor);
     drive.setSafetyEnabled(false);
+    leftConfig = new TalonFXConfiguration();
+	  rightConfig = new TalonFXConfiguration();
   }
 
   public void brakeMode() {
@@ -178,10 +192,69 @@ public class DriveSubsystem extends SubsystemBase {
       System.out.println(endingPosition*tickPerInch);
     }
 
+
+
     public void stopRobot() {
       leftmotor.set(TalonFXControlMode.PercentOutput, 0);
       rightmotor.set(TalonFXControlMode.PercentOutput, 0);
     }
+
+    public void configurePigeon(){
+      
+      //configure imu as the remote sensor for the right talon
+      rightConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.Pigeon_Yaw;
+      rightConfig.remoteFilter0.remoteSensorDeviceID = 4; // the id for the pigeon is 4 :)
+
+      //feedback coefficient and setting the pigeon as the feedback device
+      rightConfig.auxiliaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.RemoteSensor0.toFeedbackDevice();
+      rightConfig.auxiliaryPID.selectedFeedbackCoefficient = kTurnTravelUnitsPerRotation / kPigeonUnitsPerRotation;
+
+      //setting status frame periods
+      rightmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 20, 30);
+		  rightmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20, 30);
+		  rightmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20, 30);
+		  RobotContainer.pigeonIMUSubsystem.getBird().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR , 5, 30); //this b not working
+
+      rightConfig.neutralDeadband = kNeutralDeadband;
+      leftConfig.neutralDeadband = kNeutralDeadband;
+      
+      //max and min power supplied
+      leftConfig.peakOutputForward = +0.3;
+		  leftConfig.peakOutputReverse = -0.3;
+		  rightConfig.peakOutputForward = +0.3;
+		  rightConfig.peakOutputReverse = -0.3;
+
+      /* FPID Gains for turn servo */
+		  rightConfig.slot1.kP = 2.0;
+		  rightConfig.slot1.kI = 0.0;
+		  rightConfig.slot1.kD = 4.0;
+		  rightConfig.slot1.kF = 0.0;
+		  rightConfig.slot1.integralZone = 200;
+		  rightConfig.slot1.closedLoopPeakOutput = 1.00;
+		  rightConfig.slot1.allowableClosedloopError = 0;
+      
+      //closed loop time 
+      rightConfig.slot0.closedLoopPeriod = 1;
+		  rightConfig.slot1.closedLoopPeriod = 1;
+
+      //configure settings
+		  rightmotor.configAllSettings(rightConfig);
+		  leftmotor.configAllSettings(leftConfig);
+
+
+
+
+      /*leftConfig.configSelectedFeedbackSensor(TalonFXFeedbackDevice.RemoteSensor0, 0, 30);
+      rightConfig.configSelectedFeedbackSensor(TalonFXFeedbackDevice.RemoteSensor0, 0, 30);
+      */
+    }
+
+    public void drivePIDTurn(double targetAngle) {
+      leftmotor.set(TalonFXControlMode.MotionMagic, targetAngle);
+      //rightmotor.set(TalonFXControlMode.MotionMagic, targetAngle);     
+    }
+
+
 
   @Override
   public void periodic() {

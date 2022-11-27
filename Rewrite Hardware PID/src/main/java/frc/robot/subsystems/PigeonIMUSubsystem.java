@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.BaseTalon;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
@@ -62,6 +63,10 @@ public class PigeonIMUSubsystem extends SubsystemBase {
     double[] ypr = new double[3];
     bird.getRawGyro(ypr);
     return -ypr[2];
+  }
+
+  public PigeonIMU getBird(){
+    return bird;
   }
 
   @Override

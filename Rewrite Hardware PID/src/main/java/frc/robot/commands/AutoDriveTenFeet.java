@@ -17,6 +17,7 @@ public class AutoDriveTenFeet extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.driveSubsystem.configureSimpleMagic();
     RobotContainer.driveSubsystem.zeroEncoders();
     RobotContainer.driveSubsystem.drivePIDLinear(10*12);
   }
