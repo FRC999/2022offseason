@@ -15,7 +15,8 @@ public class TurnToAngle extends CommandBase {
     TargetAngle=targetdegree;
 
     
-    addRequirements(RobotContainer.pigeonIMUSubsystem);
+    addRequirements(RobotContainer.pigeonIMUSubsystem, RobotContainer.driveSubsystem);
+
   }
 
   // Called when the command is initially scheduled.

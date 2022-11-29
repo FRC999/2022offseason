@@ -35,6 +35,7 @@ public class DriveSubsystem extends SubsystemBase {
   public final static int kPigeonUnitsPerRotation = 8192;
   public final static double kTurnTravelUnitsPerRotation = 3600;
   public final static double kNeutralDeadband = 0.001;
+  //private PigeonIMU localbird ;
 
 
   /** Creates a new DriveSubsystem. */
@@ -179,10 +180,9 @@ public class DriveSubsystem extends SubsystemBase {
         30);
     rightmotor.configMotionSCurveStrength(3);
 
+    System.out.println("configure simple magic");
+
   } // End configureDriveTrainControllersForSimpleMagic
-
-
-    
 
     
     //endingPosition is inches
@@ -213,7 +213,10 @@ public class DriveSubsystem extends SubsystemBase {
       rightmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 20, 30);
 		  rightmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20, 30);
 		  rightmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20, 30);
-		  RobotContainer.pigeonIMUSubsystem.getBird().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR , 5, 30); //this b not working
+      //localbird = RobotContainer.pigeonIMUSubsystem.getBird();
+		  //localbird.setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR , 5, 30); //this b not working
+      
+      (RobotContainer.pigeonIMUSubsystem.getBird()).setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR , 5, 30); 
 
       rightConfig.neutralDeadband = kNeutralDeadband;
       leftConfig.neutralDeadband = kNeutralDeadband;
@@ -241,7 +244,7 @@ public class DriveSubsystem extends SubsystemBase {
 		  rightmotor.configAllSettings(rightConfig);
 		  leftmotor.configAllSettings(leftConfig);
 
-
+      System.out.println("pigeon configured");
 
 
       /*leftConfig.configSelectedFeedbackSensor(TalonFXFeedbackDevice.RemoteSensor0, 0, 30);
@@ -251,7 +254,89 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void drivePIDTurn(double targetAngle) {
       leftmotor.set(TalonFXControlMode.MotionMagic, targetAngle);
-      //rightmotor.set(TalonFXControlMode.MotionMagic, targetAngle);     
+      //rightmotor.set(TalonFXControlMode.MotionMagic, targetAngle);   
+      System.out.println("pigeon turned");
+    }
+
+    public void configurePigeonCondensed(){
+      (RobotContainer.pigeonIMUSubsystem.getBird()).configFactoryDefault();
+      
+      /* Set Neutral Mode */
+      leftmotor.setNeutralMode(NeutralMode.Brake);
+      //_rightMaster.setNeutralMode(NeutralMode.Brake);
+
+      //leftmotor.setInverted(_leftInvert);
+      //_rightMaster.setInverted(_rightInvert);
+
+      /*
+      * Talon FX does not need sensor phase set for its integrated sensor
+      * This is because it will always be correct if the selected feedback device is integrated sensor (default value)
+      * and the user calls getSelectedSensor* to get the sensor's position/velocity.
+      * 
+      * https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-phase
+      */
+          // _rightMaster.setSensorPhase(true);
+          // _leftMaster.setSensorPhase(true);
+      
+      /** Feedback Sensor Configuration */
+      
+      /* Configure the Pigeon IMU as a Remote Sensor for the right Talon */
+      leftConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.Pigeon_Yaw;
+      leftConfig.remoteFilter0.remoteSensorDeviceID = (RobotContainer.pigeonIMUSubsystem.getBird()).getDeviceID();
+      
+      /* Configure the Remote Sensor to be the Selected Sensor of the right Talon */
+      leftConfig.auxiliaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.RemoteSensor0.toFeedbackDevice();
+      
+      /* Scale the Selected Sensor using a coefficient (Values explained in Constants.java */
+      leftConfig.auxiliaryPID.selectedFeedbackCoefficient = kTurnTravelUnitsPerRotation / kPigeonUnitsPerRotation;
+      
+      /* Set status frame periods */
+      leftmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 20, 30);
+      leftmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20, 30);
+      leftmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20, 30);
+      (RobotContainer.pigeonIMUSubsystem.getBird()).setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR , 5, 30);
+      
+      /* Configure neutral deadband */
+      leftConfig.neutralDeadband = 0.001;
+      //_leftConfig.neutralDeadband = Constants.kNeutralDeadband;		
+
+      /* max out the peak output (for all modes).  However you can
+      * limit the output of a given PID object with configClosedLoopPeakOutput().
+      */
+      leftConfig.peakOutputForward = +1.0;
+      leftConfig.peakOutputReverse = -1.0;
+      rightConfig.peakOutputForward = +1.0;
+      rightConfig.peakOutputReverse = -1.0;
+
+      /* FPID Gains for turn servo */
+      rightConfig.slot1.kP = Constants.kGains_Turning.kP;
+      rightConfig.slot1.kI = Constants.kGains_Turning.kI;
+      rightConfig.slot1.kD = Constants.kGains_Turning.kD;
+      rightConfig.slot1.kF = Constants.kGains_Turning.kF;
+      rightConfig.slot1.integralZone = Constants.kGains_Turning.kIzone;
+      rightConfig.slot1.closedLoopPeakOutput = Constants.kGains_Turning.kPeakOutput;
+      rightConfig.slot1.allowableClosedloopError = 0;
+      
+      /* 1ms per loop.  PID loop can be slowed down if need be.
+      * For example,
+      * - if sensor updates are too slow
+      * - sensor deltas are very small per update, so derivative error never gets large enough to be useful.
+      * - sensor movement is very slow causing the derivative error to be near zero.
+      */
+          int closedLoopTimeMs = 1;
+          leftConfig.slot0.closedLoopPeriod = closedLoopTimeMs;
+          leftConfig.slot1.closedLoopPeriod = closedLoopTimeMs;
+      
+      leftmotor.configAllSettings(leftConfig);
+
+    
+      /* Initialize */
+      /*
+      firstCall = true;
+      state = false;
+      printCount = 0;
+      zeroYaw();
+      */
     }
 
 
