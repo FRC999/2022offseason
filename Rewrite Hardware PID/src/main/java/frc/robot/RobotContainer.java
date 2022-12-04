@@ -62,7 +62,7 @@ public class RobotContainer {
           .whenReleased(new InstantCommand(RobotContainer.driveSubsystem::stopRobot, RobotContainer.driveSubsystem));
 
     new JoystickButton(drivestick, 7)
-          .whenPressed(new TurnToAngle(45.0))
+          .whenPressed(new TurnToAngle())
           .whenReleased(new InstantCommand(RobotContainer.driveSubsystem::stopRobot, RobotContainer.driveSubsystem));
     
   }

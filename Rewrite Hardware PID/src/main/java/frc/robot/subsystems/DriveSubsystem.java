@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import javax.swing.text.AbstractDocument.LeafElement;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
@@ -35,6 +36,7 @@ public class DriveSubsystem extends SubsystemBase {
   public final static int kPigeonUnitsPerRotation = 8192;
   public final static double kTurnTravelUnitsPerRotation = 3600;
   public final static double kNeutralDeadband = 0.001;
+
   //private PigeonIMU localbird ;
 
 
@@ -309,6 +311,7 @@ public class DriveSubsystem extends SubsystemBase {
       rightConfig.peakOutputReverse = -1.0;
 
       /* FPID Gains for turn servo */
+      /*
       rightConfig.slot1.kP = Constants.kGains_Turning.kP;
       rightConfig.slot1.kI = Constants.kGains_Turning.kI;
       rightConfig.slot1.kD = Constants.kGains_Turning.kD;
@@ -316,6 +319,7 @@ public class DriveSubsystem extends SubsystemBase {
       rightConfig.slot1.integralZone = Constants.kGains_Turning.kIzone;
       rightConfig.slot1.closedLoopPeakOutput = Constants.kGains_Turning.kPeakOutput;
       rightConfig.slot1.allowableClosedloopError = 0;
+      */
       
       /* 1ms per loop.  PID loop can be slowed down if need be.
       * For example,
@@ -338,8 +342,58 @@ public class DriveSubsystem extends SubsystemBase {
       zeroYaw();
       */
     }
+  public void ConfigureTurning(){
 
+    rightConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.Pigeon_Yaw;
+    rightConfig.remoteFilter0.remoteSensorDeviceID = (RobotContainer.pigeonIMUSubsystem.getBird()).getDeviceID();
 
+    System.out.println((RobotContainer.pigeonIMUSubsystem.getBird()).getDeviceID());
+    
+    rightConfig.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.RemoteSensor0.toFeedbackDevice();
+
+    rightConfig.primaryPID.selectedFeedbackCoefficient = 3600/8192;
+    
+    rightmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 20, 30);
+		rightmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20, 30);
+		rightmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20, 30);
+		(RobotContainer.pigeonIMUSubsystem.getBird()).setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR , 5, 30);
+
+    rightConfig.neutralDeadband = 0.001;
+		leftConfig.neutralDeadband = 0.001;
+
+    leftConfig.peakOutputForward = +0.3;
+		leftConfig.peakOutputReverse = -0.3;
+		rightConfig.peakOutputForward = +0.3;
+		rightConfig.peakOutputReverse = -0.3;
+
+    rightConfig.slot1.kP = 0.75;
+		rightConfig.slot1.kI = 0;
+		rightConfig.slot1.kD = 0;
+		rightConfig.slot1.kF = 0.0;
+		rightConfig.slot1.integralZone = 200;
+		rightConfig.slot1.closedLoopPeakOutput = 0.3;
+		rightConfig.slot1.allowableClosedloopError = 0;
+
+    int closedLoopTimeMs = 1;
+    rightConfig.slot0.closedLoopPeriod = closedLoopTimeMs;
+    rightConfig.slot1.closedLoopPeriod = closedLoopTimeMs;
+
+    rightmotor.configAllSettings(rightConfig);
+  
+    
+    System.out.println("turning configured or smth");
+
+    //the following things are from the teleopPeriodic in the ctre example code
+    //rightmotor.selectProfileSlot(1, 1);
+  }
+
+  public void setTarget() {
+    //rightmotor.set(TalonFXControlMode.Position, 0, DemandType.AuxPID, 45);
+
+    rightmotor.selectProfileSlot(1, 0);
+    rightmotor.set(TalonFXControlMode.MotionMagic, 45);
+    System.out.println("target set or smth");
+  }
 
   @Override
   public void periodic() {

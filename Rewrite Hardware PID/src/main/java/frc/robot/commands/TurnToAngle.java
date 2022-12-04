@@ -11,8 +11,8 @@ import frc.robot.subsystems.PigeonIMUSubsystem;
 public class TurnToAngle extends CommandBase {
   private double TargetAngle;
  
-  public TurnToAngle(double targetdegree) {
-    TargetAngle=targetdegree;
+  public TurnToAngle() {
+    //TargetAngle=targetdegree;
 
     
     addRequirements(RobotContainer.pigeonIMUSubsystem, RobotContainer.driveSubsystem);
@@ -23,9 +23,11 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void initialize() {
     RobotContainer.driveSubsystem.configureSimpleMagic();
-    RobotContainer.driveSubsystem.configurePigeon();
+    //RobotContainer.driveSubsystem.configurePigeon();
+    RobotContainer.driveSubsystem.ConfigureTurning();
     RobotContainer.pigeonIMUSubsystem.zeroYaw();
-    RobotContainer.driveSubsystem.drivePIDTurn(45.0);
+    RobotContainer.driveSubsystem.setTarget();
+    //RobotContainer.driveSubsystem.drivePIDTurn(45.0);
 
   }
 
@@ -36,7 +38,7 @@ public class TurnToAngle extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    System.out.println("turn to angle ends. Interrupted: " + interrupted);
   }
 
   // Returns true when the command should end.
