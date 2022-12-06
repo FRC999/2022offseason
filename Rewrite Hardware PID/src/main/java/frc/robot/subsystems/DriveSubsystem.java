@@ -204,7 +204,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void configurePigeon(){
       
       //configure imu as the remote sensor for the right talon
-      rightConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.Pigeon_Yaw;
+      rightConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.GadgeteerPigeon_Yaw;
       rightConfig.remoteFilter0.remoteSensorDeviceID = 4; // the id for the pigeon is 4 :)
 
       //feedback coefficient and setting the pigeon as the feedback device
@@ -283,7 +283,7 @@ public class DriveSubsystem extends SubsystemBase {
       /** Feedback Sensor Configuration */
       
       /* Configure the Pigeon IMU as a Remote Sensor for the right Talon */
-      leftConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.Pigeon_Yaw;
+      leftConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.GadgeteerPigeon_Yaw;
       leftConfig.remoteFilter0.remoteSensorDeviceID = (RobotContainer.pigeonIMUSubsystem.getBird()).getDeviceID();
       
       /* Configure the Remote Sensor to be the Selected Sensor of the right Talon */
@@ -344,14 +344,17 @@ public class DriveSubsystem extends SubsystemBase {
     }
   public void ConfigureTurning(){
 
-    rightConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.Pigeon_Yaw;
+    leftmotor.setSafetyEnabled(false);
+    rightmotor.setSafetyEnabled(false);
+
+    rightConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.GadgeteerPigeon_Yaw;
     rightConfig.remoteFilter0.remoteSensorDeviceID = (RobotContainer.pigeonIMUSubsystem.getBird()).getDeviceID();
 
     System.out.println((RobotContainer.pigeonIMUSubsystem.getBird()).getDeviceID());
     
     rightConfig.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.RemoteSensor0.toFeedbackDevice();
 
-    rightConfig.primaryPID.selectedFeedbackCoefficient = 3600/8192;
+    rightConfig.primaryPID.selectedFeedbackCoefficient = 360.0/8192.0;
     
     rightmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 20, 30);
 		rightmotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20, 30);
@@ -366,17 +369,17 @@ public class DriveSubsystem extends SubsystemBase {
 		rightConfig.peakOutputForward = +0.3;
 		rightConfig.peakOutputReverse = -0.3;
 
-    rightConfig.slot1.kP = 0.75;
-		rightConfig.slot1.kI = 0;
-		rightConfig.slot1.kD = 0;
-		rightConfig.slot1.kF = 0.0;
-		rightConfig.slot1.integralZone = 200;
-		rightConfig.slot1.closedLoopPeakOutput = 0.3;
-		rightConfig.slot1.allowableClosedloopError = 0;
+    rightConfig.slot0.kP = 0.75;
+		rightConfig.slot0.kI = 0;
+		rightConfig.slot0.kD = 0;
+		rightConfig.slot0.kF = 0.0;
+		rightConfig.slot0.integralZone = 200;
+		rightConfig.slot0.closedLoopPeakOutput = 0.3;
+		rightConfig.slot0.allowableClosedloopError = 0;
 
     int closedLoopTimeMs = 1;
     rightConfig.slot0.closedLoopPeriod = closedLoopTimeMs;
-    rightConfig.slot1.closedLoopPeriod = closedLoopTimeMs;
+    rightConfig.slot0.closedLoopPeriod = closedLoopTimeMs;
 
     rightmotor.configAllSettings(rightConfig);
   
@@ -390,7 +393,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void setTarget() {
     //rightmotor.set(TalonFXControlMode.Position, 0, DemandType.AuxPID, 45);
 
-    rightmotor.selectProfileSlot(1, 0);
+    rightmotor.selectProfileSlot(0, 0);
     rightmotor.set(TalonFXControlMode.MotionMagic, 45);
     System.out.println("target set or smth");
   }
