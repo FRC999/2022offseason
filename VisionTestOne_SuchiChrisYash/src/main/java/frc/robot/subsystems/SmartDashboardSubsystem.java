@@ -14,8 +14,12 @@ public class SmartDashboardSubsystem extends SubsystemBase {
 
   public void updateAllDisplays() {
     updateCamaraValues();
+    updatePhoenixValues();
   }
 
+  public void updatePhoenixValues (){
+    SmartDashboard.putString("x and y angles of target", RobotContainer.photoVision.getYawPitch());
+  }
   public void updateCamaraValues() {
     SmartDashboard.putBoolean("Photon Vision Camera Visible", RobotContainer.networkTables.isVisible());
   }

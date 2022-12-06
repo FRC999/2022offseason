@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.NetworkTablesSubsystem;
+import frc.robot.subsystems.PhotoVisionSubsystem;
 import frc.robot.subsystems.SmartDashboardSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -26,6 +27,7 @@ public class RobotContainer {
 
   public final static NetworkTablesSubsystem networkTables = new NetworkTablesSubsystem();
   public final static SmartDashboardSubsystem smartDashboard = new SmartDashboardSubsystem();
+  public final static PhotoVisionSubsystem photoVision = new PhotoVisionSubsystem();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
