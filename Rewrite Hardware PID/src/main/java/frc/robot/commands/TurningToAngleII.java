@@ -38,6 +38,7 @@ public class TurningToAngleII extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    System.out.println("Yaw:"+RobotContainer.pigeonIMUSubsystem.getYaw());
+    return Math.abs(90 - RobotContainer.pigeonIMUSubsystem.getYaw())<RobotContainer.driveSubsystem.turnTolerance;
   }
 }

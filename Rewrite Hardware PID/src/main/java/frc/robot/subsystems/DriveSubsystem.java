@@ -39,7 +39,7 @@ public class DriveSubsystem extends SubsystemBase {
   public final static int kPigeonUnitsPerRotation = 8192;
   public final static double kTurnTravelUnitsPerRotation = 3600;
   public final static double kNeutralDeadband = 0.001;
-  
+  public final double turnTolerance = 1; 
 
 
   //private PigeonIMU localbird ;
