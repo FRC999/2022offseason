@@ -43,7 +43,6 @@ public class PigeonIMUSubsystem extends SubsystemBase {
   public double zeroYaw() {
     double temporaryDouble = getYaw();
     bird.setYaw(0);
-    System.out.println("yaw zeroed");
     return temporaryDouble;
   }
 

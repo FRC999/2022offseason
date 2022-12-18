@@ -8,17 +8,20 @@ import javax.swing.text.AbstractDocument.LeafElement;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -36,8 +39,49 @@ public class DriveSubsystem extends SubsystemBase {
   public final static int kPigeonUnitsPerRotation = 8192;
   public final static double kTurnTravelUnitsPerRotation = 3600;
   public final static double kNeutralDeadband = 0.001;
+  
+
 
   //private PigeonIMU localbird ;
+
+  //testPosition constants
+  
+  //taken from constants
+
+    
+  //WPI_TalonFX motorController = new WPI_TalonFX(10);
+/*
+  motorController = new WPI_TalonSRX(DEVICE_ID_TURRET);
+
+  motorController.configFactoryDefault();
+  //var rightConfig = new TalonSRXConfiguration();
+  rightConfig.openloopRamp = 0.2;
+  
+  // Potentiometer is primary PID to get soft limit support
+  rightConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.Analog;
+  rightConfig.forwardSoftLimitThreshold = -156;
+  rightConfig.forwardSoftLimitEnable = true;
+  rightConfig.reverseSoftLimitThreshold = -400;
+  rightConfig.reverseSoftLimitEnable = true;
+  rightConfig.slot0.kP = 64d;
+  rightConfig.slot0.kD = 0d;
+  
+  // We don't use Talon's sensor coefficient feature to convert native units to degrees mainly because it lowers
+  // precision since the value has to result in an integer. For example, if we use a coefficient of 0.0439 to convert
+  // pigeon units to degrees we only get 360 units per revolution vs. the native 8192.
+
+  motorController.configAllSettings(rightConfig);
+  motorController.selectProfileSlot(0, 0);
+  motorController.selectProfileSlot(1, 1);
+  motorController.configVoltageCompSaturation(12);
+  motorController.enableVoltageCompensation(true);
+  motorController.overrideLimitSwitchesEnable(false);
+  motorController.setNeutralMode(NeutralMode.Brake);
+  motorController.setSensorPhase(false);
+  motorController.setInverted(true);
+  motorController.setSafetyEnabled(true);
+  
+*/
 
 
   /** Creates a new DriveSubsystem. */
@@ -397,6 +441,47 @@ public class DriveSubsystem extends SubsystemBase {
     rightmotor.set(TalonFXControlMode.MotionMagic, 45);
     System.out.println("target set or smth");
   }
+
+  /*
+  public void positionToRobotAngle(double angle) {
+    var position = degreesPositionToNativePot(angle);
+      motorController.set(
+        TalonSRXControlMode.Position, 
+        MathUtil.clamp(position, -400 + 1, -156 - 1));
+  }
+
+  public static double degreesPositionToNativePot(double degrees) {
+    return ( - ((360 - (-400 * (183 / (-400 + 156)))) - (180 - 183 / 2))) / (183 / (-400 + 156));
+  }
+  */
+
+  //12/18/22 testing Subsystem
+
+  public void ConfigureMotorTurning(){
+    leftmotor.setSafetyEnabled(false);
+    rightmotor.setSafetyEnabled(false);
+    TalonFXConfiguration talonConfig = new TalonFXConfiguration();
+    talonConfig.slot0.kP = 0.4;
+    talonConfig.slot0.kD = 0.0;
+    talonConfig.remoteFilter0.remoteSensorDeviceID = 4;
+    talonConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.GadgeteerPigeon_Yaw;
+    talonConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.RemoteSensor0;
+
+    rightmotor.configFactoryDefault();
+    rightmotor.configAllSettings(talonConfig);
+    rightmotor.setNeutralMode(NeutralMode.Brake);
+    rightmotor.configClosedLoopPeakOutput(0, 0.3);
+  }
+
+  public void birdTurnRight(double position) {
+    rightmotor.set(ControlMode.Position, position);
+  }
+
+
+
+
+
+  
 
   @Override
   public void periodic() {
