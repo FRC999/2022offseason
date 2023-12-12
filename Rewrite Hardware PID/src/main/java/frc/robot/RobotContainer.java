@@ -51,7 +51,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(drivestick, 11)
-          .whenPressed(new AutoDriveTenFeet())
+          .whenPressed(new InstantCommand(RobotContainer.driveSubsystem::moveMotor, RobotContainer.driveSubsystem))
           .whenReleased(new InstantCommand(RobotContainer.driveSubsystem::stopRobot, RobotContainer.driveSubsystem));
   }
 

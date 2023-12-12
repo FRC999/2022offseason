@@ -12,19 +12,19 @@ public class SmartDashboardSubsystem extends SubsystemBase {
   /** Creates a new SmartDashboardSubsystem. */
   public SmartDashboardSubsystem() {}
 
-  void updateEncoders() {
-    SmartDashboard.putNumber("Left Encoder Value", RobotContainer.driveSubsystem.getLeftEncoder());
-    SmartDashboard.putNumber("Right Encoder Value", RobotContainer.driveSubsystem.getRightEncoder());
-    SmartDashboard.putNumber("Left Motor Error", RobotContainer.driveSubsystem.getLeftError());
-    SmartDashboard.putNumber("Right Motor Error", RobotContainer.driveSubsystem.getRightError());
-  }
+  // void updateEncoders() {
+  //   SmartDashboard.putNumber("Left Encoder Value", RobotContainer.driveSubsystem.getLeftEncoder());
+  //   SmartDashboard.putNumber("Right Encoder Value", RobotContainer.driveSubsystem.getRightEncoder());
+  //   SmartDashboard.putNumber("Left Motor Error", RobotContainer.driveSubsystem.getLeftError());
+  //   SmartDashboard.putNumber("Right Motor Error", RobotContainer.driveSubsystem.getRightError());
+  // }
 
   void updateAllDisplays() {
-    updateEncoders();
+    //updateEncoders();
   }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    updateAllDisplays();
+    //updateAllDisplays();
   }
 }
